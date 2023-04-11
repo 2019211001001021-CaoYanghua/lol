@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>农乐购</title>
+    <link rel="stylesheet" href="/css/index.css" />
+    <style>
+        .el-carousel__item h3 {
+            color: #475669;
+            opacity: 0.75;
+        }
+
+        .el-carousel__item:nth-child(4n) {
+            background-image: url("/imags/lun1.jpg");
+            background-size: 100% 100%;
+        }
+
+        .el-carousel__item:nth-child(4n+1) {
+            background-image: url("/imags/lun2.jpeg");
+            background-size: 100% 100%;
+        }
+
+        .el-carousel__item:nth-child(4n+2) {
+            background-image: url("/imags/lun3.jpeg");
+            background-size: 100% 100%;
+        }
+
+        .el-carousel__item:nth-child(4n+3) {
+            background-image: url("/imags/lun4.jpeg");
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+
+<body>
+<!-- 顶部栏 -->
+<div id="app">
+    <div class="top-nav">
+        <div class="w clearfix">
+            <div class="login">
+                您好，请<a href="login.html" class="h">登录</a>&nbsp; 免费<a
+                    href="register.html" class="h">注册</a>
+            </div>
+            <ul class="nav-list">
+                <li>
+                    <a href="./index.html" class="link">我的信息</a>
+                </li>
+                <li>
+                    <a href="./shopping.html" class="link">我的订单</a>
+                </li>
+                <li>
+                    <a href="./about.html" class="link">关于我们</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--  搜索框 + logo -->
+    <div class="searchWrap">
+        <div class="w">
+            <a href="#" class="logo">农乐购</a>
+            <div class="search-box clearfix">
+                <input class="searchInput" type="text" v-model="input_con" placeholder="请输入商品名称" />
+                <button class="search-btn" @click="search">搜索</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="w menu clearfix" >
+        <!--  轮播图 -->
+            <el-carousel :interval="5000" arrow="always" style="height: 500px;">
+                <el-carousel-item v-for="item in 4" :key="item" style="height: 500px">
+                </el-carousel-item>
+            </el-carousel>
+    </div>
+
+    <!-- 热卖单品专区 -->
+    <div id="hotsale" class="layer w">
+        <div class="layer-inner">
+            <h3 class="hotSale">热卖单品</h3>
+            <ul id="hotSaleList" class="saleList clearfix">
+
+                <li class="bs-item item">
+                    <a href="./detailed.html">
+                        <img src= "" alt="" class="item-img" />
+                        <p class="title">{{proList[0].introduction}}</p>
+                        <div class="line-2 clearfix">
+                            <span class="comment"><em>现有库存{{proList[0].stocks}}</em></span>
+                        </div>
+                        <div class="line-3">
+                            <span class="strong">{{proList[0].price}}</span>
+                            <span class="sell">已销{{proList[0].sales}}笔</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="bs-item item">
+                    <a href="./detailed.html">
+                        <img src="" alt="" class="item-img" />
+                        <p class="title">{{proList[1].introduction}}</p>
+                        <div class="line-2 clearfix">
+                            <span class="comment"><em>现有库存{{proList[1].stocks}}</em></span>
+                        </div>
+                        <div class="line-3">
+                            <span class="strong">{{proList[1].price}}</span>
+                            <span class="sell">已销{{proList[1].sales}}笔</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="bs-item item">
+                    <a href="./detailed.html">
+                        <img src="" alt="" class="item-img" />
+                        <p class="title">{{proList[2].introduction}}</p>
+                        <div class="line-2 clearfix">
+                            <span class="comment"><em>现有库存{{proList[2].stocks}}</em></span>
+                        </div>
+                        <div class="line-3">
+                            <span class="strong">{{proList[2].price}}</span>
+                            <span class="sell">已销{{proList[2].sales}}笔</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="bs-item item">
+                    <a href="./detailed.html">
+                        <img src="" alt="" class="item-img" />
+                        <p class="title">{{proList[3].introduction}}</p>
+                        <div class="line-2 clearfix">
+                            <span class="comment"><em>现有库存{{proList[3].stocks}}</em></span>
+                        </div>
+                        <div class="line-3">
+                            <span class="strong">{{proList[3].price}}</span>
+                            <span class="sell">已销{{proList[3].sales}}笔</span>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="bs-item item">
+                    <a href="./detailed.html">
+                        <img src="" alt="" class="item-img" />
+                        <p class="title">{{proList[4].introduction}}</p>
+                        <div class="line-2 clearfix">
+                            <span class="comment"><em>现有库存{{proList[4].stocks}}</em></span>
+                        </div>
+                        <div class="line-3">
+                            <span class="strong">{{proList[4].price}}</span>
+                            <span class="sell">已销{{proList[4].sales}}笔</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 喜欢专区 -->
+    <div id="guesslike" class="layer w">
+        <div class="layer-inner">
+            <h3 class="likeSale">猜你喜欢</h3>
+            <ul id="gl" class="saleList clearfix">
+                <li class="like-item item">
+                    <a href="./detailed.html">
+                        <img src="/imags/orange.webp" alt="" class="item-img" />
+                    </a>
+                    <p class="title">{{recommend[0].introduction}}</p>
+                    <div class="line-3">
+                        <span class="strong">{{recommend[0].price}}</span>
+                        <span class="sell">已销{{recommend[0].sales}}笔</span>
+                    </div>
+                </li>
+                <li class="like-item item">
+                    <a href="./detailed.html">
+                        <img src="/imags/love2.webp" alt="" class="item-img" />
+                    </a>
+                    <p class="title">{{recommend[1].introduction}}</p>
+                    <div class="line-3">
+                        <span class="strong">{{recommend[1].price}}</span>
+                        <span class="sell">已销{{recommend[1].sales}}笔</span>
+                    </div>
+                </li>
+                <li class="like-item item">
+                    <a href="./detailed.html">
+                        <img src="/imags/love3.webp" alt="" class="item-img" />
+                    </a>
+                    <p class="title">{{recommend[2].introduction}}</p>
+                    <div class="line-3">
+                        <span class="strong">{{recommend[2].price}}</span>
+                        <span class="sell">已销{{recommend[2].sales}}笔</span>
+                    </div>
+                </li>
+                <li class="like-item item">
+                    <a href="./detailed.html">
+                        <img src="/imags/love4.webp" alt="" class="item-img" />
+                    </a>
+                    <p class="title">{{recommend[3].introduction}}</p>
+                    <div class="line-3">
+                        <span class="strong">{{recommend[3].price}}</span>
+                        <span class="sell">已销{{recommend[3].sales}}笔</span>
+                    </div>
+                </li>
+                <li class="like-item item">
+                    <a href="./detailed.html">
+                        <img src="/imags/love5.webp" alt="" class="item-img" />
+                    </a>
+                    <p class="title">{{recommend[4].introduction}}</p>
+                    <div class="line-3">
+                        <span class="strong">{{recommend[4].price}}</span>
+                        <span class="sell">已销{{recommend[4].sales}}笔</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 浮动菜单 -->
+
+</div>
+</div>
+</body>
+
+<script src="../js/vue.js"></script>
+<script src="../plugins/element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="../plugins/element-ui/lib/theme-chalk/index.css">
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    new Vue({
+        el: "#app",
+        methods: {
+            login() {
+                open("http://localhost:8080/pages/login.html", "_self")
+            },
+            search() {
+                alert(this.input_con)
+            }
+        },
+
+        data: {
+            input_con:"",
+            proList: [],
+            recommend: [
+                { "id": 1, "user_id": 1, "price": 200.0, "introduction": "橙子；新鲜好吃的大橙子", "img": 0, "stocks": 222, "sales": 200, "create_time": "2023-04-10", "status": 1, "del": 1 },
+                { "id": 4, "user_id": 1, "price": 3.23, "introduction": "香蕉", "img": 0, "stocks": 500, "sales": 55, "create_time": "2023-01-01", "status": 1, "del": 1 },
+                { "id": 2, "user_id": 1, "price": 5.21, "introduction": "柿子", "img": 0, "stocks": 100, "sales": 50, "create_time": "2023-04-10", "status": 1, "del": 1 },
+                { "id": 5, "user_id": 2, "price": 2.25, "introduction": "橙子", "img": 0, "stocks": 10000, "sales": 33, "create_time": "2022-11-01", "status": 1, "del": 1 },
+                { "id": 6, "user_id": 2, "price": 1.22, "introduction": "西瓜；大西瓜", "img": 0, "stocks": 200, "sales": 33, "create_time": "2023-01-01", "status": 1, "del": 1 }
+            ]
+        },
+        mounted() {
+          axios.get("/product").then((res) => {
+            this.proList = res.data.data;
+          });
+        },
+    })
+</script>
+
+</html>

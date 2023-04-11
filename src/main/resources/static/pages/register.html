@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册</title>
+    <style>
+        .el-main {
+            background-image: url("../imags/register_back.jpg");
+            background-size: 100% 100%;
+            text-align: left;
+            height: 500px;
+            line-height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+    <el-container style="height: 900px;border: none;">
+        <el-header
+                style="font-size: 40px;background-color: rgb(238, 241, 246);text-align:center;">助农服务系统
+        </el-header>
+        <el-main style="font-size: 20px;background-color: rgb(238, 241, 246);">
+            <div style="border: #330867;font-style: oblique;font-size: larger;">&nbsp&nbsp欢迎注册！</div>
+            <br>
+
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+
+                <el-form-item label="用户名" prop="username">
+                    <el-input v-model="ruleForm.username" placeholder="请输入用户名" style="width: 350px;"></el-input>
+                </el-form-item>
+
+                <el-form-item label="密码" prop="password" required>
+                    <el-input type="password" v-model="ruleForm.password" autocomplete="off"
+                              style="width: 350px;"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="checkPassword" required>
+                    <el-input type="password" v-model="ruleForm.checkPassword" autocomplete="off"
+                              style="width: 350px;"></el-input>
+                </el-form-item>
+
+                <el-form-item label="出生日期" required>
+                    <el-col :span="11">
+                        <el-form-item prop="birthDate" style="width: 350px;">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.birthDate"
+                                            style="width: 100%;"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+
+                <el-form-item label="性别" prop="gender">
+                    <el-radio-group v-model="ruleForm.gender">
+                        <el-radio label="男"></el-radio>
+                        <el-radio label="女"></el-radio>
+                    </el-radio-group>
+                </el-form-item>
+
+
+                <el-form-item label="联系电话" prop="phone">
+                    <el-input v-model="ruleForm.phone" placeholder="请输入电话号码" maxlength="11" style="width: 350px"
+                              show-word-limit></el-input>
+                </el-form-item>
+
+                <el-form-item label="地址">
+                    <el-cascader :options="options" v-model="address1" clearable style="width: 350px"></el-cascader>
+                </el-form-item>
+
+                <el-form-item label="详细地址" prop="address2">
+                    <el-input v-model="address2" placeholder="请输入详细地址" style="width: 350px;"></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+                    <el-button @click="resetForm('ruleForm')">重置</el-button>
+                </el-form-item>
+
+            </el-form>
+
+
+        </el-main>
+    </el-container>
+</div>
+</body>
+
+<script src="../js/vue.js"></script>
+<script src="../plugins/element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="../plugins/element-ui/lib/theme-chalk/index.css">
+<script src="../js/axios-0.18.0.js"></script>
+
+<script>
+    new Vue({
+        el: "#app",
+
+        data() {
+
+            var validatePass = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    if (this.ruleForm.checkPassword !== '') {
+                        this.$refs.ruleForm.validateField('checkPass');
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.ruleForm.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
+            return {
+                address1:"",
+                address2:"",
+                ruleForm: {
+                    username: '',
+                    password: '',
+                    checkPassword: '',
+                    birthDate: '',
+                    gender: '',
+                    phone: '',
+                    address: ''
+                },
+
+                rules: {
+                    username: [
+                        {required: true, message: '请输入用户名', trigger: 'blur'},
+                        {min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur'}
+                    ],
+                    password: [
+                        {validator: validatePass, trigger: 'blur'}
+                    ],
+                    checkPassword: [
+                        {validator: validatePass2, trigger: 'blur'}
+                    ],
+                    mail: [
+                        {required: true, message: '请输入邮箱', trigger: 'blur'},
+                    ],
+                    degree: [
+                        {required: true, message: '请选择学历', trigger: 'change'}
+                    ],
+                    birth: [
+                        {type: 'date', required: true, message: '请选择出生日期', trigger: 'change'}
+                    ],
+                    gender: [
+                        {required: true, message: '请选择性别', trigger: 'change'}
+                    ],
+                    phone: [
+                        {required: true, message: '请填写联系电话', trigger: 'blur'}
+                    ],
+                    address: [
+                        {required: true, message: '请输入地址', trigger: 'blur'},
+                    ]
+                },
+                options: [{
+                    value: '广东省',
+                    label: '广东省',
+                    children: [{value: '广州市', label: '广州市'},
+                        {value: '深圳市', label: '深圳市'},
+                        {value: '韶关市', label: '韶关市'},
+                        {value: '珠海市', label: '珠海市'},
+                        {value: '汕头市', label: '汕头市'},
+                        {value: '佛山市', label: '佛山市'},
+                        {value: '江门市', label: '江门市'},
+                        {value: '湛江市', label: '湛江市'},
+                        {value: '茂名市', label: '茂名市'},
+                        {value: '肇庆市', label: '肇庆市'},
+                        {value: '惠州市', label: '惠州市'},
+                        {value: '梅州市', label: '梅州市'},
+                        {value: '汕尾市', label: '汕尾市'},
+                        {value: '河源市', label: '河源市'},
+                        {value: '阳江市', label: '阳江市'},
+                        {value: '清远市', label: '清远市'},
+                        {value: '东莞市', label: '东莞市'},
+                        {value: '中山市', label: '中山市'},
+                        {value: '潮州市', label: '潮州市'},
+                        {value: '揭阳市', label: '揭阳市'},
+                        {value: '云浮市', label: '云浮市'}
+                    ]
+                }, {
+                    value: '江西省',
+                    label: '江西省',
+                    children: [{value: '南昌市', label: '南昌市'},
+                        {value: '景德镇市', label: '景德镇市'},
+                        {value: '萍乡市', label: '萍乡市'},
+                        {value: '九江市', label: '九江市'},
+                        {value: '新余市', label: '新余市'},
+                        {value: '鹰潭市', label: '鹰潭市'},
+                        {value: '赣州市', label: '赣州市'},
+                        {value: '吉安市', label: '吉安市'},
+                        {value: '宜春市', label: '宜春市'},
+                        {value: '抚州市', label: '抚州市'},
+                        {value: '上饶市', label: '上饶市'}
+                    ]
+                }, {
+                    value: '浙江省',
+                    label: '浙江省',
+                    children: [{value: '杭州市', label: '杭州市'},
+                        {value: '宁波市', label: '宁波市'},
+                        {value: '温州市', label: '温州市'},
+                        {value: '嘉兴市', label: '嘉兴市'},
+                        {value: '金华市', label: '金华市'},
+                        {value: '衢州市', label: '衢州市'},
+                        {value: '舟山市', label: '舟山市'},
+                        {value: '台州市', label: '台州市'},
+                        {value: '丽水市', label: '丽水市'}
+                    ]
+                },
+                    {
+                        value: '海南省',
+                        label: '海南省',
+                        children: [{value: '海口市', label: '海口市'},
+                            {value: '三亚市', label: '三亚市'},
+                            {value: '三沙市', label: '三沙市'},
+                            {value: '儋州市', label: '儋州市'}
+                        ]
+                    },
+                    {
+                        value: '湖南省',
+                        label: '湖南省',
+                        children: [{value: '长沙市', label: '长沙市'},
+                            {value: '株洲市', label: '株洲市'},
+                            {value: '湘潭市', label: '湘潭市'},
+                            {value: '衡阳市', label: '衡阳市'},
+                            {value: '邵阳市', label: '邵阳市'},
+                            {value: '岳阳市', label: '岳阳市'},
+                            {value: '常德市', label: '常德市'},
+                            {value: '张家界市', label: '张家界市'},
+                            {value: '益阳市', label: '益阳市'},
+                            {value: '郴州市', label: '郴州市'},
+                            {value: '永州市', label: '永州市'},
+                            {value: '怀化市', label: '怀化市'},
+                            {value: '娄底市', label: '娄底市'}
+                        ]
+                    },
+                    {
+                        value: '河北省',
+                        label: '河北省',
+                        children: [{value: '石家庄市', label: '石家庄市'},
+                            {value: '唐山市', label: '唐山市'},
+                            {value: '秦皇岛市', label: '秦皇岛市'},
+                            {value: '邯郸市', label: '邯郸市'},
+                            {value: '邢台市', label: '邢台市'},
+                            {value: '保定市', label: '保定市'},
+                            {value: '张家口市', label: '张家口市'},
+                            {value: '承德市', label: '承德市'},
+                            {value: '沧州市', label: '沧州市'},
+                            {value: '廊坊市', label: '廊坊市'},
+                            {value: '衡水市', label: '衡水市'}
+                        ]
+                    },{
+                        value: '北京市',
+                        label: '北京市'
+                    },{
+                        value: '上海市',
+                        label: '上海市'
+                    },{
+                        value: '天津市',
+                        label: '天津市'
+                    },{
+                        value: '重庆市',
+                        label: '重庆市'
+                    }
+                ],
+
+            };
+        },
+        methods: {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.ruleForm.address =  this.address1+this.address2
+                        axios.put("/user", this.ruleForm).then((res) => {
+                            if (res.data.code === 20001) {
+                                this.$alert('恭喜你！注册成功！', '提示', {
+                                    confirmButtonText: '确定',
+                                    callback: action => {
+                                        open("http://localhost:63342/Assys/static/pages/login.html", "_self")
+                                    }
+                                });
+                            }
+                            else if (res.data.code === 30002){
+                                this.$message.warning('电话号码已存在！');
+                            }
+                            else {
+                                this.$message.error('创建状态错误，请刷新页面重新注册');
+                            }
+                        });
+                    } else {
+                        alert('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            }
+        }
+    })
+</script>
+
+</html>
